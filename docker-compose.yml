@@ -1,0 +1,10 @@
+version: '3.7'
+
+services:
+  php-cli:
+    build:
+      context: .
+      dockerfile: docker/php-cli/Dockerfile
+    volumes:
+      - .:/usr/src/phisys
+      - ${HOME}/.composer:/.composer
