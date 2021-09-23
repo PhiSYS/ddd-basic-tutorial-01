@@ -1,0 +1,28 @@
+grumphp:
+  ascii:
+    succeeded: me-gusta.txt
+  tasks:
+    composer:
+#      strict: true
+    jsonlint: ~
+#    phpcpd:
+#      exclude:
+#        - 'var'
+#        - 'vendor'
+#      min_lines: 10
+    phpcs:
+      standard:
+        - 'phpcs.xml.dist'
+      whitelist_patterns:
+        - '/^src\/(.*)/'
+      encoding: 'UTF-8'
+    phplint: ~
+    phpstan:
+      autoload_file: phpstan.neon
+      configuration: ~
+      level: 2
+    phpunit: ~
+#    behat: ~
+    phpversion:
+      project: '8.0'
+#    securitychecker_local: ~

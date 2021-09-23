@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace PhiSYS\Shared;
 
@@ -13,18 +14,7 @@ trait CollectionTrait
     }
 
     /**
-     * Resetea la coleccion.
-     */
-    private function reset(): void
-    {
-        $this->items = [];
-        $this->rewind();
-    }
-
-    /**
      * Añade un elemento al primer lugar de la colección.
-     *
-     * @param mixed $value Valor
      */
     public function unshift($value): void
     {
@@ -34,8 +24,6 @@ trait CollectionTrait
 
     /**
      * Añade un elemento a la colección.
-     *
-     * @param mixed $value Valor
      */
     public function add($value): void
     {
@@ -45,14 +33,13 @@ trait CollectionTrait
 
     /**
      * Añade un elemento a la colección si no existe previamente.
-     *
-     * @param mixed $value Valor
      */
     public function addOnly($value): void
     {
         if (false === $this->indexOf($value)) {
             $this->add($value);
         }
+
         $this->rewind();
     }
 
@@ -71,16 +58,18 @@ trait CollectionTrait
     /**
      * Añade un array.
      *
-     * @param array $arr  Array
-     * @param bool  $only Añade unico
+     * @param array $arr Array
+     * @param bool $only Añade unico
      */
     public function addArray($arr, $only = false)
     {
         foreach ($arr as $item) {
             if ($only) {
                 $this->addOnly($item);
+
                 continue;
             }
+
             $this->add($item);
         }
     }
@@ -98,18 +87,13 @@ trait CollectionTrait
 
     /**
      * Recupera el valor de una key, o el valor por defecto si la key no existe.
-     *
-     * @param int   $index   Posición
-     * @param mixed $default Valor por defecto
-     *
-     * @return mixed
      */
-    public function get($index, $default = null)
+    public function get(int $index, $default = null)
     {
-        $index = (int) $index;
         if ($index < 0 && $this->count() >= abs($index)) {
             $index += $this->count();
         }
+
         if (array_key_exists($index, $this->items)) {
             return $this->items[$index];
         }
@@ -130,8 +114,6 @@ trait CollectionTrait
     /**
      * Busca la primera posición de un elemento en la colección.
      *
-     * @param mixed $searchedValue Valor a buscar
-     *
      * @return int|false
      */
     public function indexOf($searchedValue)
@@ -148,32 +130,32 @@ trait CollectionTrait
     /**
      * busca las posiciones de un elemento en la colección.
      *
-     * @param mixed $searchedValue Valor a buscar
-     *
      * @return array|false
      */
     public function indexesOf($searchedValue)
     {
         $keys = [];
+
         foreach ($this->items as $key => $value) {
-            if ($value === $searchedValue) {
-                $keys[] = $key;
+            if ($value !== $searchedValue) {
+                continue;
             }
+
+            $keys[] = $key;
         }
 
-        return empty($keys) ? false : $keys;
+        return empty($keys) ? false : $keys; // phpcs:ignore
     }
 
     /**
      * Elimina todas las posiciones del array con el valor indicado.
-     *
-     * @param mixed $valueToRemove Valor a remover
      *
      * @throws \Exception
      */
     public function remove($valueToRemove)
     {
         $deleteKeys = $this->indexesOf($valueToRemove);
+
         for ($i = count($deleteKeys) - 1; $i >= 0; --$i) {
             $this->removeByIndex($deleteKeys[$i]);
         }
@@ -182,8 +164,7 @@ trait CollectionTrait
     /**
      * Elimina todas las posiciones del array de todos los valores indicados.
      *
-     * @param mixed[] $items Valores a remover
-     *
+     * @param array $items Valores a remover
      * @throws \Exception
      */
     public function removeAll(array $items)
@@ -197,14 +178,15 @@ trait CollectionTrait
      * Elimina una posición por la key.
      *
      * @param string $index Posición a eliminar
-     *
      * @throws \Exception
      */
     public function removeByIndex($index)
     {
-        if (is_integer($index) && array_key_exists($index, $this->items)) {
-            array_splice($this->items, $index, 1);
+        if (!is_integer($index) || !array_key_exists($index, $this->items)) {
+            return;
         }
+
+        array_splice($this->items, $index, 1);
     }
 
     /**
@@ -227,6 +209,7 @@ trait CollectionTrait
      */
     public function isEmpty()
     {
+        // phpcs:ignore
         return empty($this->items);
     }
 
@@ -240,6 +223,7 @@ trait CollectionTrait
     {
         $args = func_get_args();
         array_splice($args, 0, 1, [0, 0]);
+
         foreach ($this->items as $key => $item) {
             $args[0] = $key;
             $args[1] = $item;
@@ -252,17 +236,17 @@ trait CollectionTrait
      *
      * @param callable $func Funcion que hará el matching con cada item de la colección. Debe tener la
      *                       forma function($key, $item) { ... }
-     *
-     * @return mixed
      */
     public function matchFirst(callable $func)
     {
         $args = func_get_args();
         array_splice($args, 0, 1, [0, 0]);
+
         foreach ($this->items as $key => $item) {
             $args[0] = $key;
             $args[1] = $item;
             $response = call_user_func_array($func, $args);
+
             if ($response) {
                 return $item;
             }
@@ -276,7 +260,6 @@ trait CollectionTrait
      *
      * @param callable $func Funcion que hará el matching con cada item de la colección. Debe tener la
      *                       forma function($key, $item) { ... }
-     *
      * @return static
      */
     public function match(callable $func)
@@ -284,13 +267,17 @@ trait CollectionTrait
         $matches = new static();
         $args = func_get_args();
         array_splice($args, 0, 1, [0, 0]);
+
         foreach ($this->items as $key => $item) {
             $args[0] = $key;
             $args[1] = $item;
             $response = call_user_func_array($func, $args);
-            if ($response) {
-                $matches->add($item);
+
+            if (!$response) {
+                continue;
             }
+
+            $matches->add($item);
         }
 
         return $matches;
@@ -312,5 +299,14 @@ trait CollectionTrait
     public function __toString()
     {
         return implode(', ', $this->items);
+    }
+
+    /**
+     * Resetea la coleccion.
+     */
+    private function reset(): void
+    {
+        $this->items = [];
+        $this->rewind();
     }
 }

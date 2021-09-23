@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace PhiSYS\Shared;
 
@@ -10,7 +11,6 @@ trait CountableTrait
      * Count elements of an object.
      *
      * @see http://php.net/manual/en/countable.count.php
-     *
      * @return int The custom count as an integer.
      *             </p>
      *             <p>

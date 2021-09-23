@@ -1,0 +1,18 @@
+#!/bin/sh
+DOCKER_PHP_SERVICE='php-cli'
+
+protected_branch='main'
+current_branch=$(git symbolic-ref HEAD | sed -e 's,.*/\(.*\),\1,')
+
+if [ $protected_branch = $current_branch ]
+then
+    echo "${protected_branch} is a protected branch, create PR to merge"
+    exit 1 # won't commit
+fi
+
+echo "Running GrumPHP..."
+SCRIPT=$(docker-compose run --no-deps --rm $DOCKER_PHP_SERVICE sh -c "grumphp run" 2>&1)
+STATUS=$?
+
+echo "$SCRIPT"
+exit $STATUS
