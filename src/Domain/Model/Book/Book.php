@@ -18,20 +18,10 @@ final class Book extends DomainModel
         $this->title = $title;
     }
 
-    public function id(): BookId
-    {
-        return $this->id;
-    }
-
-    public function title(): Title
-    {
-        return $this->title;
-    }
-
     /*
      * Used to create a non previously existent entity. May register events.
      */
-    public function create(BookId $id, Title $title): self
+    public static function create(BookId $id, Title $title): self
     {
         $instance = new self($id, $title);
         // $instance->recordThat(new BookCreatedEvent(...));
@@ -45,5 +35,15 @@ final class Book extends DomainModel
     public static function from(BookId $id, Title $title): self
     {
         return new self($id, $title);
+    }
+
+    public function id(): BookId
+    {
+        return $this->id;
+    }
+
+    public function title(): Title
+    {
+        return $this->title;
     }
 }
