@@ -18,11 +18,6 @@ final class Author extends DomainModel
         $this->name = $name;
     }
 
-    public static function from(AuthorId $id, Name $name): self
-    {
-        return new self($id, $name);
-    }
-
     public function id(): AuthorId
     {
         return $this->id;
@@ -31,5 +26,24 @@ final class Author extends DomainModel
     public function name(): Name
     {
         return $this->name;
+    }
+
+    /*
+     * Used to create a non previously existent entity. May register events.
+     */
+    public static function create(AuthorId $id, Name $name): self
+    {
+        $instance = new self($id, $name);
+        // $instance->recordThat(new AuthorCreatedEvent(...));
+
+        return $instance;
+    }
+
+    /*
+     * Used to hydrate an entity. Does not register events.
+     */
+    public static function from(AuthorId $id, Name $name): self
+    {
+        return new self($id, $name);
     }
 }
