@@ -5,6 +5,7 @@ ENV LC_ALL="C.UTF-8"
 RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y \
+        git \
         locales \
         unzip && \
     apt-get autoremove -y && \

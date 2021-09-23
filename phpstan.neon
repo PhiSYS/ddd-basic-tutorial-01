@@ -1,0 +1,15 @@
+includes:
+  - vendor/phpstan/phpstan-symfony/extension.neon
+parameters:
+  checkMissingIterableValueType: false
+  excludes_analyse:
+    - %rootDir%/../../../tests/*
+    - %rootDir%/../../../public/*
+    - %rootDir%/../../../config/*
+    - %rootDir%/../../../migrations/*
+  ignoreErrors:
+    -
+      message: '#Unsafe usage of new static\(\)\.#'
+      path: src/Shared/ValueObject/StringValueObject.php
+  symfony:
+    container_xml_path: null
