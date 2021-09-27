@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace PhiSYS\Domain\Model\Book;
 
+use PhiSYS\Domain\Model\Book\Event\BookWasCreated;
 use PhiSYS\Shared\Domain\DomainModel;
 use PhiSYS\Domain\Model\Book\ValueObject\BookId;
 use PhiSYS\Domain\Model\Book\ValueObject\Title;
@@ -18,18 +19,18 @@ final class Book extends DomainModel
         $this->title = $title;
     }
 
-    /*
+    /**
      * Used to create a non previously existent entity. May register events.
      */
     public static function create(BookId $id, Title $title): self
     {
         $instance = new self($id, $title);
-        // $instance->recordThat(new BookCreatedEvent(...));
+        $instance->recordThat(BookWasCreated::from($instance));
 
         return $instance;
     }
 
-    /*
+    /**
      * Used to hydrate an entity. Does not register events.
      */
     public static function from(BookId $id, Title $title): self
