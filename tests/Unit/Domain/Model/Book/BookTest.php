@@ -2,7 +2,7 @@
 
 namespace PhiSYS\Tests\Unit\Domain\Model\Book;
 
-use PhiSYS\Domain\DomainModel;
+use PhiSYS\Shared\Domain\DomainModel;
 use PhiSYS\Domain\Model\Book\Book;
 use PhiSYS\Domain\Model\Book\ValueObject\BookId;
 use PhiSYS\Domain\Model\Book\ValueObject\Title;
