@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace PhiSYS\Domain\Model\Book;
 
-use PhiSYS\Domain\DomainModel;
+use PhiSYS\Shared\Domain\DomainModel;
 use PhiSYS\Domain\Model\Book\ValueObject\BookId;
 use PhiSYS\Domain\Model\Book\ValueObject\Title;
 
@@ -45,5 +45,13 @@ final class Book extends DomainModel
     public function title(): Title
     {
         return $this->title;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+        ];
     }
 }

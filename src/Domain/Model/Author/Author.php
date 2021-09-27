@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace PhiSYS\Domain\Model\Author;
 
-use PhiSYS\Domain\DomainModel;
+use PhiSYS\Shared\Domain\DomainModel;
 use PhiSYS\Domain\Model\Author\ValueObject\AuthorId;
 use PhiSYS\Domain\Model\Author\ValueObject\Name;
 
@@ -45,5 +45,13 @@ final class Author extends DomainModel
     public function name(): Name
     {
         return $this->name;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+        ];
     }
 }
