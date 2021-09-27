@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace PhiSYS\Domain\Model\Author;
 
+use PhiSYS\Domain\Model\Author\Event\AuthorWasCreated;
 use PhiSYS\Shared\Domain\DomainModel;
 use PhiSYS\Domain\Model\Author\ValueObject\AuthorId;
 use PhiSYS\Domain\Model\Author\ValueObject\Name;
@@ -18,18 +19,18 @@ final class Author extends DomainModel
         $this->name = $name;
     }
 
-    /*
+    /**
      * Used to create a non previously existent entity. May register events.
      */
     public static function create(AuthorId $id, Name $name): self
     {
         $instance = new self($id, $name);
-        // $instance->recordThat(new AuthorCreatedEvent(...));
+        $instance->recordThat(AuthorWasCreated::from($instance));
 
         return $instance;
     }
 
-    /*
+    /**
      * Used to hydrate an entity. Does not register events.
      */
     public static function from(AuthorId $id, Name $name): self
