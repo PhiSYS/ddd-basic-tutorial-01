@@ -9,7 +9,7 @@ use PhiSYS\Domain\Model\Book\Exception\BookAlreadyExistsException;
 use PhiSYS\Domain\Model\Book\ValueObject\BookId;
 use PhiSYS\Shared\Domain\DomainModel;
 
-class CreateBookHandler
+final class CreateBookHandler
 {
     private BookRepository $bookRepository;
 

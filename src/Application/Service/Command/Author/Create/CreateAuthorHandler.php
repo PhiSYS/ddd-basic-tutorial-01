@@ -9,7 +9,7 @@ use PhiSYS\Domain\Model\Author\Exception\AuthorAlreadyExistsException;
 use PhiSYS\Domain\Model\Author\ValueObject\AuthorId;
 use PhiSYS\Shared\Domain\DomainModel;
 
-class CreateAuthorHandler
+final class CreateAuthorHandler
 {
     private AuthorRepository $authorRepository;
 

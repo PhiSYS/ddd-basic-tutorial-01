@@ -6,7 +6,7 @@ namespace PhiSYS\Application\Service\Command\Author\Create;
 use PhiSYS\Domain\Model\Author\ValueObject\AuthorId;
 use PhiSYS\Domain\Model\Author\ValueObject\Name as AuthorName;
 
-class CreateAuthorCommand
+final class CreateAuthorCommand
 {
     private AuthorId $authorId;
     private AuthorName $authorName;

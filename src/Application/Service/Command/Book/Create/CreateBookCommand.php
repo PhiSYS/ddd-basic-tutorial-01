@@ -6,7 +6,7 @@ namespace PhiSYS\Application\Service\Command\Book\Create;
 use PhiSYS\Domain\Model\Book\ValueObject\BookId;
 use PhiSYS\Domain\Model\Book\ValueObject\Title as BookTitle;
 
-class CreateBookCommand
+final class CreateBookCommand
 {
     private BookId $bookId;
     private BookTitle $bookTitle;
