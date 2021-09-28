@@ -4,14 +4,21 @@ namespace PhiSYS\Tests\Unit\Application\Service\Command\Book\Create;
 
 use PhiSYS\Application\Service\Command\Book\Create\CreateBookCommand;
 use PhiSYS\Application\Service\Command\Book\Create\CreateBookHandler;
+use PhiSYS\Domain\Model\Author\ValueObject\AuthorId;
 use PhiSYS\Domain\Model\Book\Book;
 use PhiSYS\Domain\Model\Book\BookRepository;
 use PhiSYS\Domain\Model\Book\Exception\BookAlreadyExistsException;
+use PhiSYS\Domain\Model\Book\ValueObject\BookId;
+use PhiSYS\Domain\Model\Book\ValueObject\Title;
+use PhiSYS\Domain\Service\Author\ByIdAuthorFinder;
+use PhiSYS\Domain\Service\Book\BookCreator;
 use PHPUnit\Framework\TestCase;
 
 class CreateBookHandlerTest extends TestCase
 {
     private BookRepository $bookRepository;
+    private ByIdAuthorFinder $byIdAuthorFinder;
+    private BookCreator $bookCreator;
     private CreateBookHandler $createBookHandler;
 
     protected function setUp(): void
@@ -19,43 +26,33 @@ class CreateBookHandlerTest extends TestCase
         parent::setUp();
 
         $this->bookRepository = $this->createMock(BookRepository::class);
-        $this->createBookHandler = new CreateBookHandler($this->bookRepository);
+        $this->byIdAuthorFinder = $this->createMock(ByIdAuthorFinder::class);
+        $this->bookCreator = $this->getMockBuilder(BookCreator::class)
+            ->enableOriginalConstructor()
+            ->setConstructorArgs([$this->bookRepository, $this->byIdAuthorFinder])
+            ->getMock()
+        ;
+        $this->createBookHandler = new CreateBookHandler($this->bookCreator);
     }
 
     /* Happy Path */
-    public function test_given_command_when_handled_then_saved()
+    public function test_given_command_when_handled_then_creator_invoked()
     {
         $bookIdValue = 'bc680af0-3ce4-40b7-9b1d-dceddbbad6bd';
         $bookTitleValue = 'The bible of foo bar';
+        $authorIdValue = '39a422ea-9320-4b3e-95d3-d1f201eaa1ec';
 
-        $this->bookRepository
+        $this->bookCreator
             ->expects($this->once())
-                ->method('save')
-                    ->with($this->isInstanceOf(Book::class))
+                ->method('__invoke')
+                    ->with(
+                        $this->isInstanceOf(BookId::class),
+                        $this->isInstanceOf(Title::class),
+                        $this->isInstanceOf(AuthorId::class),
+                    )
         ;
 
-        $command = CreateBookCommand::from($bookIdValue, $bookTitleValue);
-        ($this->createBookHandler)($command);
-    }
-
-    /* Sad Path */
-    public function test_given_command_when_handled_and_book_already_exists_then()
-    {
-        $bookIdValue = '71d452e5-36af-4f2e-86e1-473c61bfb4bd';
-        $bookTitleValue = 'Foo bar for dummies';
-
-        $this->bookRepository
-            ->expects($this->once())
-                ->method('find')
-                    ->willReturn($this->createMock(Book::class))
-        ;
-        $this->bookRepository
-            ->expects($this->never())
-                ->method('save')
-        ;
-        $this->expectException(BookAlreadyExistsException::class);
-
-        $command = CreateBookCommand::from($bookIdValue, $bookTitleValue);
+        $command = CreateBookCommand::from($bookIdValue, $bookTitleValue, $authorIdValue);
         ($this->createBookHandler)($command);
     }
 }

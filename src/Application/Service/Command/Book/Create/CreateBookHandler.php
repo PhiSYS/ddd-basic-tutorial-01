@@ -3,41 +3,23 @@ declare(strict_types=1);
 
 namespace PhiSYS\Application\Service\Command\Book\Create;
 
-use PhiSYS\Domain\Model\Book\Book;
-use PhiSYS\Domain\Model\Book\BookRepository;
-use PhiSYS\Domain\Model\Book\Exception\BookAlreadyExistsException;
-use PhiSYS\Domain\Model\Book\ValueObject\BookId;
+use PhiSYS\Domain\Service\Book\BookCreator;
 use PhiSYS\Shared\Domain\DomainModel;
 
 final class CreateBookHandler
 {
-    private BookRepository $bookRepository;
+    private BookCreator $bookCreator;
 
-    public function __construct(BookRepository $bookRepository)
+    public function __construct(BookCreator $bookCreator)
     {
-        $this->bookRepository = $bookRepository;
+        $this->bookCreator = $bookCreator;
     }
 
     public function __invoke(CreateBookCommand $command): void
     {
-        $this->assertBookDoesNotAlreadyExist($command->bookId());
-
-        $book = Book::create($command->bookId(), $command->bookTitle());
+        $book = ($this->bookCreator)($command->bookId(), $command->bookTitle(), $command->authorId());
 
         $this->dispatchEvents($book);
-
-        $this->bookRepository->save($book);
-    }
-
-    private function assertBookDoesNotAlreadyExist(BookId $bookId): void
-    {
-        $book = $this->bookRepository->find($bookId);
-
-        if (null !== $book) {
-            throw new BookAlreadyExistsException(
-                \sprintf("Book '%s' titled '%s' already exists", $bookId->value(), $book->title()->value()),
-            );
-        }
     }
 
     /** @TODO use an injected event bus. */
