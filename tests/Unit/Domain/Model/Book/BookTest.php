@@ -2,6 +2,7 @@
 
 namespace PhiSYS\Tests\Unit\Domain\Model\Book;
 
+use PhiSYS\Domain\Model\Author\ValueObject\AuthorId;
 use PhiSYS\Domain\Model\Book\Event\BookWasCreated;
 use PhiSYS\Shared\Domain\DomainModel;
 use PhiSYS\Domain\Model\Book\Book;
@@ -16,6 +17,7 @@ class BookTest extends TestCase
         $book = Book::create(
             $this->createMock(BookId::class),
             $this->createMock(Title::class),
+            $this->createMock(AuthorId::class),
         );
 
         $this->assertInstanceOf(DomainModel::class, $book);
@@ -29,6 +31,7 @@ class BookTest extends TestCase
         $book = Book::from(
             $this->createMock(BookId::class),
             $this->createMock(Title::class),
+            $this->createMock(AuthorId::class),
         );
 
         $this->assertInstanceOf(DomainModel::class, $book);
@@ -39,23 +42,27 @@ class BookTest extends TestCase
     {
         $bookId = $this->createMock(BookId::class);
         $bookTitle = $this->createMock(Title::class);
-        $book = Book::from($bookId, $bookTitle);
+        $authorId = $this->createMock(AuthorId::class);
+        $book = Book::from($bookId, $bookTitle, $authorId);
 
         $this->assertSame($bookId, $book->id());
         $this->assertSame($bookTitle, $book->title());
+        $this->assertSame($authorId, $book->authorId());
     }
 
     public function test_given_book_when_json_serialize_then_serializes_as_expected()
     {
         $bookId = $this->createMock(BookId::class);
         $bookTitle = $this->createMock(Title::class);
+        $authorId = $this->createMock(AuthorId::class);
 
-        $book = Book::from($bookId, $bookTitle);
+        $book = Book::from($bookId, $bookTitle, $authorId);
 
         $this->assertEquals(
             [
                 'id' => $bookId,
                 'title' => $bookTitle,
+                'author_id' => $authorId,
             ],
             $book->jsonSerialize(),
         );
