@@ -27,7 +27,7 @@ final class BookCreator
         $this->assertBookDoesNotAlreadyExist($bookId);
         $this->assertAuthorExists($authorId);
 
-        $book = Book::create($bookId, $title);
+        $book = Book::create($bookId, $title, $authorId);
 
         $this->bookRepository->save($book);
 
