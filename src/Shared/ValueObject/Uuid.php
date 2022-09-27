@@ -6,7 +6,8 @@ namespace PhiSYS\Shared\ValueObject;
 use Ramsey\Uuid\Uuid as RamseyUuid;
 use Ramsey\Uuid\UuidInterface;
 
-final class Uuid extends StringValueObject
+// phpcs:ignore
+class Uuid extends StringValueObject
 {
     protected UuidInterface $uuid;
 
