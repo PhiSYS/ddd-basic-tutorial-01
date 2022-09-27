@@ -22,6 +22,7 @@ abstract class StringValueObject implements ValueObject
         return static::class === $other::class && $this->value === $other->value;
     }
 
+    #[\ReturnTypeWillChange]
     public function jsonSerialize(): string
     {
         return $this->value;
