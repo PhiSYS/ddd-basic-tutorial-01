@@ -53,9 +53,6 @@
     "ondram/ci-detector": {
         "version": "3.5.1"
     },
-    "opis/closure": {
-        "version": "3.6.2"
-    },
     "phar-io/manifest": {
         "version": "2.0.3"
     },
