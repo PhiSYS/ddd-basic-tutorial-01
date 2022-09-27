@@ -48,7 +48,8 @@ final class Author extends DomainModel
         return $this->name;
     }
 
-    public function jsonSerialize()
+    #[\ReturnTypeWillChange]
+    public function jsonSerialize(): array
     {
         return [
             'id' => $this->id,
