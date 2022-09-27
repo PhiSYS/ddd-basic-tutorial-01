@@ -9,7 +9,7 @@ use PhiSYS\Domain\Model\Author\ValueObject\AuthorId;
 use PhiSYS\Domain\Model\Author\ValueObject\Name;
 use PhiSYS\Shared\ValueObject\Uuid;
 
-class AuthorWasCreated extends DomainEvent
+final class AuthorWasCreated extends DomainEvent
 {
     private Uuid $id;
     private AuthorId $authorId;

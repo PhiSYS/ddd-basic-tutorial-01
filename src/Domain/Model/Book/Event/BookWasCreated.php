@@ -10,7 +10,7 @@ use PhiSYS\Domain\Model\Book\ValueObject\Title;
 use PhiSYS\Shared\Domain\DomainEvent;
 use PhiSYS\Shared\ValueObject\Uuid;
 
-class BookWasCreated extends DomainEvent
+final class BookWasCreated extends DomainEvent
 {
     private Uuid $id;
     private BookId $bookId;
