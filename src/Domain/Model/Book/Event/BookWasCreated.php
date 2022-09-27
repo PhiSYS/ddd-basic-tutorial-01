@@ -62,7 +62,8 @@ final class BookWasCreated extends DomainEvent
         return $this->authorId;
     }
 
-    public function jsonSerialize()
+    #[\ReturnTypeWillChange]
+    public function jsonSerialize(): array
     {
         return [
             'event' => self::class,

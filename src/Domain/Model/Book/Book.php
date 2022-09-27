@@ -56,7 +56,8 @@ final class Book extends DomainModel
         return $this->authorId;
     }
 
-    public function jsonSerialize()
+    #[\ReturnTypeWillChange]
+    public function jsonSerialize(): array
     {
         return [
             'id' => $this->id,
