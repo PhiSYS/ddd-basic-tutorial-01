@@ -16,7 +16,7 @@ trait CountableTrait
      *             <p>
      *             The return value is cast to an integer.
      */
-    public function count()
+    public function count(): int
     {
         return count($this->items);
     }
