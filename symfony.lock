@@ -53,9 +53,6 @@
     "ondram/ci-detector": {
         "version": "3.5.1"
     },
-    "opis/closure": {
-        "version": "3.6.2"
-    },
     "phar-io/manifest": {
         "version": "2.0.3"
     },
@@ -266,9 +263,6 @@
             "src/Controller/.gitignore",
             "src/Kernel.php"
         ]
-    },
-    "symfony/http-client-contracts": {
-        "version": "v2.4.0"
     },
     "symfony/http-foundation": {
         "version": "v5.3.7"
